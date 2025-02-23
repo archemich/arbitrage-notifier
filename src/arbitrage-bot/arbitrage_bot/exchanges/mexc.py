@@ -10,7 +10,7 @@ class MexcExchange(BaseExchange):
 
     async def get_ticker_data(self) -> List[TickerData]:
         base = 'https://api.mexc.com/'
-        endpoint = '/api/v3/ticker/price'
+        endpoint = '/api/v3/ticker/24hr'
         url = urljoin(base, endpoint)
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:

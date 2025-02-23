@@ -1,9 +1,11 @@
 import aiohttp
 from typing import Literal
-
 from urllib.parse import urljoin
 
-from .exceptions import TelegramAPIError
+from tenacity import retry, wait_fixed, retry_if_exception_type, stop_after_delay
+
+from .exceptions import TelegramAPIError, TelegramAPIRateError
+
 
 class TelegramAPI:
     def __init__(self, api_key: str):
@@ -13,6 +15,9 @@ class TelegramAPI:
     def _gen_endpoint(self, method):
         return f'/bot{self.api_key}/{method}'
 
+    @retry(retry=retry_if_exception_type(TelegramAPIRateError),
+           wait=wait_fixed(3),
+           stop=stop_after_delay(20))
     async def _do(
             self,
             http_method: str,
@@ -32,8 +37,9 @@ class TelegramAPI:
                 status = res.status
                 if 200 <= status < 300:
                     return await res.json()
-
-                raise TelegramAPIError(status, await res.text())
+                if status == 429:
+                    raise TelegramAPIRateError(await res.text())
+                raise TelegramAPIError(await res.text(), status)
 
     async def get(self, tg_method: str, params: dict | None = None):
         return await self._do('GET', tg_method, params=params)
