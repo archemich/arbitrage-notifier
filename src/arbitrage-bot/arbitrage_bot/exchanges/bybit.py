@@ -7,7 +7,6 @@ from ..models import TickerData
 from .base import BaseExchange
 
 
-
 class BybitExchange(BaseExchange):
 
     async def get_ticker_data(self) -> List[TickerData]:
