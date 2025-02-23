@@ -1,4 +1,5 @@
 import aiohttp
+from typing import Literal
 
 from urllib.parse import urljoin
 
@@ -45,7 +46,7 @@ class TelegramAPI:
             chat_id: str,
             message: str,
             message_thread_id: int = None,
-            parse_mode: str = None
+            parse_mode: Literal['MarkdownV2', 'Markdown', 'HTML'] | None = None
     ):
         tjson = {
             'chat_id': chat_id,

@@ -19,7 +19,7 @@ def compare_ticker_data(price1: float, price2: float):
 
 async def _main():
     settings = get_settings()
-    notifier = TelegramNotifier(settings.tg_api_key, '403392095')
+    notifier = TelegramNotifier(settings.tg_api_key, '@criptti_arb_bot')
     while True:
         bybit = await BybitExchange().get_ticker_data()
         mexc = await MexcExchange().get_ticker_data()
@@ -30,10 +30,12 @@ async def _main():
         diffs: List[SpreadInfo] = []
         for k in matched_symbols:
             diff, spread = compare_ticker_data(bybit_symbols[k], mexc_symbols[k])
-            if 0.1> abs(spread) > 0.01 and diff > 0.7:
+            if (0.1> abs(spread) > 0.01
+                    # and diff > 0.7
+            ):
 
 
-                exchange1, exchange2 = 'bybit', 'mexc'
+                exchange1, exchange2 = 'Bybit', 'Mexc'
                 price1, price2 = bybit_symbols[k], mexc_symbols[k]
                 if spread < 0:
                     exchange1, exchange2 = exchange2, exchange1
