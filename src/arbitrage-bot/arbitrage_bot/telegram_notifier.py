@@ -1,10 +1,10 @@
 import textwrap
 from datetime import timedelta, datetime
 
-from pydantic.v1.generics import check_parameters_count
 
 from .models import SpreadInfo
 from .telegram import TelegramAPI
+from .constants import TELEGRAM_SYMBOL_PAUSE
 
 class TelegramNotifier:
     def __init__(self, api_key: str, chat_id):
@@ -23,7 +23,7 @@ class TelegramNotifier:
             """
         )
         self.symbol_pause = {}
-        self.timeout = timedelta(seconds=10)
+        self.timeout = timedelta(seconds=TELEGRAM_SYMBOL_PAUSE)
 
     def check_pause(self, symbol):
         if symbol in self.symbol_pause:

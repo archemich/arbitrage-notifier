@@ -1,6 +1,6 @@
-from typing import Annotated
+from typing import Annotated, Self
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from .validators import validate_symbol
 
@@ -20,3 +20,10 @@ class SpreadInfo(BaseModel):
     @classmethod
     def validate_symbol(cls, value: str):
         return validate_symbol(value)
+
+
+    @model_validator(mode='after')
+    def exchange_price_ordered(self) -> Self:
+        if self.exchange1_price >= self.exchange2_price:
+            raise ValueError('exchange1_price must be less than exchange2_price')
+        return self

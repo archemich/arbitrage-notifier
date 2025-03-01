@@ -15,7 +15,10 @@ class MexcExchange(BaseExchange):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 res = await response.json()
-                return [TickerData(symbol=x['symbol'], price=x['price']) for x in res]
+                return [
+                    TickerData(symbol=x['symbol'], ask_price=float(x['askPrice']), bid_price=float(x['bidPrice']))
+                    for x in res
+                ]
     @property
     def name(self):
         return 'Mexc'

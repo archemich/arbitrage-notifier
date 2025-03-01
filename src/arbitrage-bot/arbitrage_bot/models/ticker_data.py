@@ -5,7 +5,8 @@ from .validators import validate_symbol
 
 class TickerData(BaseModel):
     symbol: str  # Assert format is <Sym1><Sym2>. e.g. SOLUSDT
-    price: float
+    ask_price: float
+    bid_price: float
 
     @field_validator('symbol', mode='after')
     @classmethod

@@ -1,0 +1,1 @@
+TELEGRAM_SYMBOL_PAUSE = 60  # seconds
